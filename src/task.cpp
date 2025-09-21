@@ -23,3 +23,31 @@ void execute_tasks_in_order() {
     for (size_t i = 0; i < g_task_count; ++i)
         g_tasks[i].func();
 }
+
+void sort_tasks_by_priority(size_t start, size_t end) {
+    if (start >= end) return;
+
+    size_t current = start;
+    for (size_t i = start; i <= end; ++i) {
+        if (g_tasks[i].priority > g_tasks[start].priority) {
+            Task temp = g_tasks[start];
+            g_tasks[start] = g_tasks[i];
+            g_tasks[i] = temp;
+        }
+    }
+    Task temp = g_tasks[start];
+    g_tasks[start] = g_tasks[current];
+    g_tasks[current] = temp;
+
+    if (current > start)
+        sort_tasks_by_priority(start, current-1);
+
+    if (end > current + 1)
+        sort_tasks_by_priority(current+1, end);
+}
+void sort_tasks_by_priority() {
+    sort_tasks_by_priority(0, g_task_count - 1);
+}
+void execute_tasks_by_priority() {
+
+}
