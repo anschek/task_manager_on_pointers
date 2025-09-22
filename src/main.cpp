@@ -1,16 +1,45 @@
 #include <iostream>
+#include "../include/task.h"
+int n = 5;
+int m = 20;
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+void f1() {
+    std::cout << "f1() has started\n";
+    for (int i = 0, j = m; i < n; ++i, j+=n)
+        std::cout << j << ' ';
+    std::cout << "\nf1() has finished\n";
+}
+
+void f2() {
+    std::cout << "f2() has started\n";
+    for (int i = 0, j = 1; i < n; ++i, j*=2)
+        std::cout << j << ' ';
+    std::cout << "\nf2() has finished\n";
+}
+
+void f3() {
+    std::cout << "f3() has started\n";
+    std::cout << "f3() has finished\n";
+}
+
 int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the <b>lang</b> variable name to see how CLion can help you rename it.
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+    Task tasks[3] = {
+        {f1, Priority::LOW},
+        {f2, Priority::HIGH},
+        {f3, Priority::MEDIUM}
+    };
 
-    for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
-    }
+    for (int i=0; i <4; ++i)
+        for (auto task : tasks)
+            add_task(task);
+    execute_tasks_by_priority();
+
+    std::cout << '\n';
+
+    for (int i=0; i <2; ++i)
+        for (auto task : tasks)
+            add_task(task);
+    execute_tasks_by_priority();
 
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
