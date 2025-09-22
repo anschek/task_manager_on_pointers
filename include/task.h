@@ -7,7 +7,7 @@
 
 #include <memory>
 
-enum Priority { LOW, MEDIUM, HIGH };
+enum class Priority { LOW, MEDIUM, HIGH };
 struct Task {
     void (*func)();
     Priority priority;
@@ -16,8 +16,6 @@ struct Task {
 extern std::unique_ptr<Task[]> g_tasks;
 extern size_t g_task_count;
 
-void add_task(Task task);
-void execute_tasks_in_order();
+void add_task(const Task& task);
 void execute_tasks_by_priority();
-
 #endif //TASK_MANAGER_ON_POINTERS_TASK_H

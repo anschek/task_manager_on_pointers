@@ -8,7 +8,7 @@
 size_t g_task_count = 0;
 std::unique_ptr<Task[]> g_tasks = std::make_unique<Task[]>(g_task_count);
 
-void add_task(Task task) {
+void add_task(const Task& task) {
     // выделение увеличенного участка памяти
     std::unique_ptr<Task[]> new_arr = std::make_unique<Task[]>(g_task_count + 1);
 
@@ -24,30 +24,27 @@ void execute_tasks_in_order() {
         g_tasks[i].func();
 }
 
-void sort_tasks_by_priority(size_t start, size_t end) {
-    if (start >= end) return;
-
-    size_t current = start;
-    for (size_t i = start; i <= end; ++i) {
-        if (g_tasks[i].priority > g_tasks[start].priority) {
-            Task temp = g_tasks[start];
-            g_tasks[start] = g_tasks[i];
-            g_tasks[i] = temp;
+void sort_tasks_by_priority() {
+    for (int i = 0; i < g_task_count; ++i) {
+        bool flag = true;
+        for (int j = 0; j < g_task_count - (i + 1); ++j) {
+            if (g_tasks[j].priority < g_tasks[j + 1].priority) {
+                flag = false;
+                std::swap (g_tasks[j], g_tasks[j + 1]);
+            }
+        }
+        if (flag) {
+            break;
         }
     }
-    Task temp = g_tasks[start];
-    g_tasks[start] = g_tasks[current];
-    g_tasks[current] = temp;
-
-    if (current > start)
-        sort_tasks_by_priority(start, current-1);
-
-    if (end > current + 1)
-        sort_tasks_by_priority(current+1, end);
 }
-void sort_tasks_by_priority() {
-    sort_tasks_by_priority(0, g_task_count - 1);
-}
+
 void execute_tasks_by_priority() {
+    sort_tasks_by_priority();
 
+    for (size_t i = 0; i < g_task_count; ++i)
+        g_tasks[i].func();
+
+    g_task_count = 0;
+    g_tasks = std::make_unique<Task[]>(g_task_count);
 }
